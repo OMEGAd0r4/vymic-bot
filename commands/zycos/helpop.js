@@ -32,8 +32,8 @@ class helpopCommand extends commando.Command {
             .addField('**__User Request__**', requestmessage)
             .setTimestamp()
 
-            let logschannel = message.guild.channels.find(`name`, "logs");
-            if(!logschannel) return message.channel.send("Couldn't find the logs channel");
+            let logschannel = message.guild.channels.find(`name`, "👥logs");
+            if(!logschannel) return message.channel.send("Couldn't find the 👥logs channel");
 
             message.delete(3000);
             logschannel.send(requestembed);
