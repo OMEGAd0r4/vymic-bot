@@ -1,41 +1,51 @@
-const Discord = require("discord.js");
 const commando = require('discord.js-commando')
+const Discord = require('discord.js');
 const prefix = "-";
 const bot = new commando.Client({
-  commandPrefix: prefix
+    commandPrefix: prefix
 });
 
-class closeCommand extends commando.Command {
-    constructor(client) 
+class statusCommand extends commando.Command {
+    constructor(client)
     {
       super(client, {
-        name: 'close', 
+        name: 'status',
         group: 'zycos',
-        memberName: 'close',
-        description: "Closes a support ticket"
+        memberName: 'status',
+        description: 'Shows the status of the Zycos Network'
       });
     }
 
-    async run(message, args)
+    async run(message)
     {
-        if (!message.channel.name.startsWith(`support_room`)) return message.channel.send(`You can't use the close command outside of a ticket channel.`);
-    message.channel.send(`Are you sure? Once confirmed, you cannot reverse this action!\nTo confirm, type \`-confirm\`. This will time out in 20 seconds and be cancelled.`)
-    .then((m) => {
-      message.channel.awaitMessages(response => response.content === '-confirm', {
-        max: 1,
-        time: 20000,
-        errors: ['time'],
-      })
-      .then((collected) => {
-          message.channel.delete();
+        //npm install request --save
+        var request = require("request");
+        var mcIP = "ZYCOS.CF";
+        var mcPort = "";
+
+        var url = "http://mcapi.us/server/status?ip=" + mcIP + "&port" + mcPort;
+        request(url, function(err, response, body) {
+            if (err) message.channel.send(err);
+
+            body = JSON.parse(body);
+            
+            var status = `The Zycos Network is currently offline`;
+            if(body.players.now){
+                message.channel.send({embed: new Discord.RichEmbed()
+                    .setTitle("**Zycos II Status**")
+                    .setColor("#FF0000")
+                    .addField("The Zycos network is currently online with,", `${body.players.now} people playing`)
+                    .setThumbnail("https://cdn.discordapp.com/attachments/526598553116606464/526685878345531422/server-icon.png")})
+            }
+            if(!body.players.now){
+                message.channel.send({embed: new Discord.RichEmbed()
+                    .setTitle("**Zycos II Status**")
+                    .setColor("#FF0000")
+                    .addField("The Zycos network is currently online with,", "-> 0 players")
+                    .setThumbnail("https://cdn.discordapp.com/attachments/526598553116606464/526685878345531422/server-icon.png")})
+            }
         })
-        .catch(() => {
-          m.edit('Ticket close timed out, the ticket was not closed.').then(m2 => {
-              m2.delete();
-          }, 3000);
-        });
-    });
     }
 }
 
-module.exports = closeCommand;
+module.exports = statusCommand;
