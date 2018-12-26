@@ -24,3 +24,13 @@ bot.registry.registerCommandsIn(__dirname + "/commands");
 bot.registry.registerDefaults();
 //REGISTIES
 
+//WELCOME MESSAGE
+bot.on('guildMemberAdd', (member) => {
+    const welcomechannel = member.guild.channels.find('name', `👋🏻ᴡᴇʟᴄᴏᴍᴇ`);
+    welcomechannel.send({embed: new Discord.RichEmbed()
+        .setColor("#4286f4")
+        .setTitle("**New User**")
+        .setDescription(`${member}. Welcome to the **Vymic Network | Discord**.`)});
+})
+//WELCOME MESSAGE
+
