@@ -14,7 +14,7 @@ bot.login(process.env.token);
 //GETS THE BOT ONLINE
 bot.on('ready',function(){
     console.log(`Bot is now online!`);
-    bot.user.setActivity(`-help | Zycos`, { type: 'WATCHING' });
+    bot.user.setActivity(`-help | Vymic`, { type: 'WATCHING' });
 });
 //GETS THE BOT ONLINE
 
